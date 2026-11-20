@@ -12,11 +12,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-/* VOICE: practical, warm, shopkeeper's tool — big numbers, zero jargon
+/* VOICE: practical, warm, for any seller — big buttons, big numbers, few words
    IDEA: a cash-register ticket that tallies itself, one stripe per payment method
-   PICTURE: the day's profit, huge, with a stacked bar of sales by method
+   PICTURE: the day's profit, huge; product buttons you tap once per sale
    COLOUR and TYPE: white ground, ink, payment brand colours as stripes; Figtree 800 + Figtree
-   LAYOUT: result on top, then entry form, then per-method table, cash count, history */
+   LAYOUT: setup, result, quick-sale buttons, other operation, report, details, backup */
 :root{color-scheme:light;--bg:#f6f6f2;--card:#fff;--ink:#14181f;--mute:#5d6470;--line:#e3e3dc;--pos:#137a43;--neg:#c62828;--acc:#14181f;--acci:#fff;--warn:#fff4d6}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#101318;--card:#1a1f27;--ink:#eef0f3;--mute:#9aa3b0;--line:#2a313c;--pos:#4fd18b;--neg:#ff7b7b;--acc:#eef0f3;--acci:#101318;--warn:#3a3214}}
 :root[data-theme=dark]{color-scheme:dark;--bg:#101318;--card:#1a1f27;--ink:#eef0f3;--mute:#9aa3b0;--line:#2a313c;--pos:#4fd18b;--neg:#ff7b7b;--acc:#eef0f3;--acci:#101318;--warn:#3a3214}
@@ -24,16 +24,17 @@
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Figtree,system-ui,sans-serif;overflow-x:clip}
 .wrap{max-width:760px;margin:0 auto;padding:16px max(4vw,14px) 60px}
 h1{font-size:22px;font-weight:800;margin:0}
-h2{font-size:18px;font-weight:800;margin:0 0 12px}
+h2{font-size:19px;font-weight:800;margin:0 0 12px}
 .top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .date{display:flex;align-items:center;gap:6px}
 button,input,select{font:inherit;color:inherit}
 .ib{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:18px}
 input[type=date]{height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);padding:0 10px;font-size:16px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px}
-.hero .lbl{color:var(--mute);font-size:15px}
+.lbl{color:var(--mute);font-size:15px}
 .big{font-size:clamp(40px,11vw,64px);font-weight:800;line-height:1.05;white-space:nowrap;margin:2px 0 10px}
-.big.pos{color:var(--pos)}.big.neg{color:var(--neg)}
+.mid{font-size:clamp(30px,8vw,44px)}
+.pos{color:var(--pos)}.neg{color:var(--neg)}
 .duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-bottom:14px}
 .duo div{border-radius:12px;background:var(--bg);padding:10px 12px}
 .duo b{display:block;font-size:20px;white-space:nowrap}
@@ -51,9 +52,59 @@ label{display:block;font-size:14px;color:var(--mute);margin:10px 0 6px}
 .quick button{height:40px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-weight:600}
 .meth{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
 .meth button{height:48px;border-radius:12px;border:2px solid var(--line);background:var(--card);cursor:pointer;font-weight:600;text-align:left;padding:0 10px}
-.meth button.on{border-color:var(--ink)}
+.meth button.on{border-color:var(--ink);background:var(--bg)}
 .go{width:100%;height:54px;margin-top:14px;border:0;border-radius:14px;background:var(--acc);color:var(--acci);font-size:18px;font-weight:800;cursor:pointer}
 :focus-visible{outline:3px solid #ff7900;outline-offset:2px}
+/* setup */
+.shops{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.shops button{min-height:72px;border-radius:14px;border:2px solid var(--line);background:var(--bg);cursor:pointer;font-weight:800;font-size:17px;text-align:left;padding:10px 14px}
+.shops small{display:block;font-weight:400;color:var(--mute);font-size:13px}
+/* products */
+.prods{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.prod{position:relative;min-height:84px;padding-right:40px!important;overflow-wrap:anywhere;border-radius:16px;border:0;cursor:pointer;text-align:left;padding:12px 14px;color:#fff;font-weight:800;font-size:17px;line-height:1.2;box-shadow:inset 0 -4px 0 rgba(0,0,0,.18);transition:transform .08s}
+.prod:active{transform:scale(.96)}
+.prod b{display:block;font-size:22px;margin-top:6px;white-space:nowrap}
+.prod .n{position:absolute;top:8px;right:8px;min-width:28px;height:28px;border-radius:14px;background:rgba(255,255,255,.92);color:#14181f;font-size:14px;display:flex;align-items:center;justify-content:center;padding:0 6px}
+.hint{font-size:14px;color:var(--mute);margin:8px 0 0}
+details{margin-top:12px}
+summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:center}
+.plist{list-style:none;margin:8px 0 0;padding:0}
+.plist li{display:grid;grid-template-columns:minmax(0,1fr) 110px 44px;gap:6px;margin-bottom:6px}
+.plist input{height:44px;border-radius:10px;border:1px solid var(--line);background:var(--bg);padding:0 10px;font-size:16px}
+.x{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:transparent;cursor:pointer}
+.padd{display:grid;grid-template-columns:minmax(0,1fr) 110px 44px;gap:6px;margin-top:6px}
+.padd button{border-radius:10px;border:0;background:var(--acc);color:var(--acci);font-weight:800;font-size:20px;cursor:pointer}
+.sm{height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);padding:0 14px;cursor:pointer;font-weight:600}
+/* student accounts */
+.kids{list-style:none;margin:10px 0 0;padding:0}
+.kids>li{border-bottom:1px solid var(--line)}
+.krow{display:flex;align-items:center;gap:8px;padding:8px 0}
+.kname{flex:1;text-align:left;background:transparent;border:0;cursor:pointer;padding:4px 0;font-weight:800;font-size:17px;min-height:44px}
+.kname small{display:block;font-weight:400;font-size:14px;color:var(--mute)}
+.kname small b{font-weight:800}
+.serve{flex:none;min-width:104px;height:48px;border-radius:12px;border:0;background:var(--acc);color:var(--acci);font-weight:800;cursor:pointer;font-size:16px}
+.serve.done{background:var(--bg);color:var(--pos);border:1px solid var(--line)}
+.kdet{background:var(--bg);border-radius:14px;padding:14px;margin:0 0 12px}
+.kdet .mid{margin:0 0 8px}
+.kdet ul{list-style:none;margin:10px 0 0;padding:0;font-size:15px}
+.kdet ul li{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
+.kdet ul li span:first-child{color:var(--mute)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips button{height:44px;padding:0 14px;border-radius:12px;border:2px solid var(--line);background:var(--card);cursor:pointer;font-weight:700}
+.chips button.on{border-color:var(--ink);background:var(--acc);color:var(--acci)}
+.kadd{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;margin-top:6px}
+.low{color:#c77700}
+/* report */
+.cols{display:flex;align-items:stretch;gap:3px;height:150px;margin:6px 0 4px}
+.col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;border:0;background:transparent;padding:0;cursor:pointer;gap:4px}
+.col .b{width:100%;max-width:44px;border-radius:5px 5px 2px 2px;background:var(--pos);min-height:2px}
+.col .b.neg{background:var(--neg)}
+.col.cur .b{outline:2px solid var(--ink);outline-offset:1px}
+.col small{font-size:13px;color:var(--mute);height:18px;line-height:18px}
+.facts{list-style:none;margin:12px 0 0;padding:0}
+.facts li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+.facts li span{color:var(--mute)}
+.facts li b{text-align:right;white-space:nowrap}
 table{width:100%;border-collapse:collapse;font-size:15px}
 th,td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
 th:first-child,td:first-child{text-align:left}
@@ -61,7 +112,6 @@ th{color:var(--mute);font-weight:600;font-size:13px}
 tfoot td{font-weight:800;border:0}
 .scroll{overflow-x:auto}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.row .txt{flex:1 1 160px}
 .ecart{font-weight:800;margin-top:10px}
 .ops{list-style:none;margin:0;padding:0}
 .ops li{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
@@ -72,14 +122,14 @@ tfoot td{font-weight:800;border:0}
 .ops .del{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:transparent;cursor:pointer;flex:none}
 .empty{color:var(--mute);padding:10px 0}
 .acts{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
-.acts a,.acts button{display:flex;align-items:center;justify-content:center;height:50px;border-radius:14px;font-weight:800;text-decoration:none;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:16px}
-.acts a{background:#25d366;color:#08311b;border:0}
-.note{background:var(--warn);border-radius:12px;padding:10px 12px;font-size:14px;margin-bottom:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
-.note button{height:40px;border-radius:10px;border:1px solid var(--line);background:var(--card);padding:0 12px;cursor:pointer;font-weight:600}
-.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--acc);color:var(--acci);padding:12px 16px;border-radius:12px;font-weight:600;display:none;gap:12px;align-items:center;z-index:9;max-width:92vw}
-.toast button{background:transparent;border:0;color:inherit;text-decoration:underline;cursor:pointer;font-weight:800}
-@media(max-width:600px){.duo b{font-size:17px}}
-@media(prefers-reduced-motion:reduce){.bar span{transition:none}}
+.acts a,.acts button,.acts .fbtn{display:flex;align-items:center;justify-content:center;height:50px;margin:0;border-radius:14px;font-weight:800;text-decoration:none;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:16px;text-align:center}
+.acts a.wa{background:#25d366;color:#08311b;border:0}
+.acts .dark{background:var(--acc);color:var(--acci);border:0}
+.note{background:var(--warn);border-radius:12px;padding:10px 12px;font-size:15px;margin:10px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--acc);color:var(--acci);padding:12px 16px;border-radius:12px;font-weight:600;display:none;gap:14px;align-items:center;z-index:9;max-width:92vw;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.toast button{background:transparent;border:0;color:inherit;text-decoration:underline;cursor:pointer;font-weight:800;min-height:36px}
+@media(max-width:600px){.duo b{font-size:17px}.prods{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){.bar span,.prod{transition:none}}
 </style>
 </head>
 <body>
@@ -93,9 +143,15 @@ tfoot td{font-weight:800;border:0}
     </div>
   </div>
 
+  <section class="card" id="setup" hidden>
+    <h2>Quel est votre commerce ?</h2>
+    <p class="lbl" style="margin:-4px 0 12px">On prépare vos boutons de vente. Vous pourrez changer les produits et les prix après.</p>
+    <div class="shops" id="shops"></div>
+  </section>
+
   <div class="note" id="demo" hidden>
-    <span>Ce sont des opérations d'exemple pour voir comment ça marche.</span>
-    <button id="clearDemo">Effacer les exemples</button>
+    <span>Les opérations affichées sont des exemples.</span>
+    <button class="sm" id="clearDemo">Effacer les exemples</button>
   </div>
 
   <section class="card hero">
@@ -110,25 +166,81 @@ tfoot td{font-weight:800;border:0}
   </section>
 
   <section class="card">
-    <h2>Nouvelle opération</h2>
+    <h2 id="qTitle">Vente rapide</h2>
+    <label style="margin-top:0">Paiement en :</label>
+    <div class="meth" id="meth"></div>
+    <label id="qHint">Touchez le produit vendu (1 toucher = 1 vente)</label>
+    <div class="prods" id="prods"></div>
+    <details id="pmgr">
+      <summary>Changer mes produits et mes prix</summary>
+      <ul class="plist" id="plist"></ul>
+      <div class="padd">
+        <input class="txt" id="pn" placeholder="Nouveau produit" autocomplete="off">
+        <input class="txt" id="pp" inputmode="numeric" placeholder="Prix">
+        <button id="padd" aria-label="Ajouter le produit">+</button>
+      </div>
+      <button class="sm" id="reshop" style="margin-top:10px">Changer de type de commerce</button>
+    </details>
+  </section>
+
+  <section class="card" id="acc" hidden>
+    <h2>Comptes des élèves</h2>
+    <p class="lbl" style="margin-top:-4px">Les parents rechargent le compte. À chaque repas servi, le prix est retiré automatiquement.</p>
+    <div class="duo">
+      <div><span class="lbl">Élèves</span><b id="aN">0</b></div>
+      <div><span class="lbl">Argent sur les comptes</span><b id="aTot">0 F</b></div>
+    </div>
+    <label style="margin-top:0">Repas à servir maintenant :</label>
+    <div class="chips" id="aMeal"></div>
+    <label for="aQ">Élèves</label>
+    <div class="row"><input class="txt" id="aQ" placeholder="Chercher un élève ou une classe…" autocomplete="off" style="flex:1 1 180px"><button class="sm" id="aLow">À recharger</button></div>
+    <ul class="kids" id="kids"></ul>
+    <details id="aAdd">
+      <summary>Ajouter un élève</summary>
+      <div class="kadd">
+        <input class="txt" id="kN" placeholder="Nom et prénom" autocomplete="off" style="grid-column:1/-1">
+        <input class="txt" id="kC" placeholder="Classe (ex : 2nde MEI)" autocomplete="off">
+        <input class="txt" id="kT" inputmode="tel" placeholder="Tél. parent" autocomplete="off">
+      </div>
+      <button class="go" id="kAdd" style="margin-top:8px">Ajouter l'élève</button>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2>Autre montant ou dépense</h2>
     <div class="seg" role="group" aria-label="Type">
       <button id="tVente" class="on">Vente (entrée)</button>
       <button id="tDep">Dépense (sortie)</button>
     </div>
+    <label style="margin-top:0">Dépenses fréquentes</label>
+    <div class="quick" id="deps" style="margin:0 0 4px"></div>
     <label for="amt">Montant (FCFA)</label>
     <input class="amt" id="amt" inputmode="numeric" placeholder="0" autocomplete="off">
     <div class="quick">
       <button data-q="100">+100</button><button data-q="500">+500</button><button data-q="1000">+1 000</button><button data-q="5000">+5 000</button><button data-q="0">Effacer</button>
     </div>
-    <label>Moyen de paiement</label>
-    <div class="meth" id="meth"></div>
     <label for="desc">Note (facultatif)</label>
-    <input class="txt" id="desc" placeholder="Ex : 2 sacs de riz, transport…" autocomplete="off">
+    <input class="txt" id="desc" placeholder="Ex : achat de sucre, transport…" autocomplete="off">
+    <p class="hint">Le moyen de paiement est celui choisi plus haut.</p>
     <button class="go" id="add">Ajouter</button>
   </section>
 
   <section class="card">
-    <h2>Détail par moyen de paiement</h2>
+    <div class="top" style="margin-bottom:6px"><h2 style="margin:0">Bilan</h2>
+      <div class="seg" style="margin:0;min-width:220px"><button id="bW" class="on">Semaine</button><button id="bM">Mois</button></div></div>
+    <div class="lbl" id="bPer"></div>
+    <div class="big mid" id="bProf"></div>
+    <div class="duo">
+      <div><span class="lbl">Ventes</span><b id="bIn"></b></div>
+      <div><span class="lbl">Dépenses</span><b id="bOut"></b></div>
+    </div>
+    <div class="lbl">Bénéfice par jour (touchez un jour pour l'ouvrir)</div>
+    <div class="cols" id="bCols"></div>
+    <ul class="facts" id="bFacts"></ul>
+  </section>
+
+  <section class="card">
+    <h2>Détail du jour par moyen de paiement</h2>
     <div class="scroll">
       <table>
         <thead><tr><th>Moyen</th><th>Entrées</th><th>Sorties</th><th>Solde</th></tr></thead>
@@ -141,28 +253,41 @@ tfoot td{font-weight:800;border:0}
   <section class="card">
     <h2>Contrôle des espèces</h2>
     <div class="row">
-      <div style="flex:1 1 160px"><label for="fond">Fonds de caisse au matin</label><input class="txt" id="fond" inputmode="numeric" placeholder="0"></div>
-      <div style="flex:1 1 160px"><label for="compte">Espèces comptées le soir</label><input class="txt" id="compte" inputmode="numeric" placeholder="Compter le tiroir"></div>
+      <div style="flex:1 1 160px"><label for="fond">Monnaie dans la caisse le matin</label><input class="txt" id="fond" inputmode="numeric" placeholder="0"></div>
+      <div style="flex:1 1 160px"><label for="compte">Espèces comptées le soir</label><input class="txt" id="compte" inputmode="numeric" placeholder="Compter la caisse"></div>
     </div>
     <div class="ecart" id="attendu"></div>
     <div class="ecart" id="ecart"></div>
   </section>
 
   <section class="card">
-    <h2>Opérations de la journée</h2>
+    <h2>Opérations du jour</h2>
     <ul class="ops" id="ops"></ul>
   </section>
 
   <section class="card">
     <h2>Envoyer le point du jour</h2>
     <div class="acts">
-      <a id="wa" href="#" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="wa" id="wa" href="#" target="_blank" rel="noopener">WhatsApp</a>
       <button id="copy">Copier le texte</button>
     </div>
-    <label style="margin-top:12px">Les données restent dans ce téléphone, dans ce navigateur.</label>
+  </section>
+
+  <section class="card">
+    <h2>Sauvegarde</h2>
+    <p class="lbl" style="margin-top:-4px">Vos données sont dans ce téléphone. Sauvegardez chaque semaine : si vous changez de téléphone, vous pourrez tout récupérer.</p>
+    <div class="note" id="bkWarn" hidden></div>
+    <div class="acts">
+      <button class="dark" id="bk">Sauvegarder</button>
+      <label class="fbtn" for="rs">Récupérer</label>
+    </div>
+    <input type="file" id="rs" accept=".json,application/json" hidden>
+    <div class="acts" style="margin-top:8px" id="shareRow" hidden><button id="bkShare" style="grid-column:1/-1">Envoyer la sauvegarde (WhatsApp, Drive…)</button></div>
+    <div class="note" id="rsAsk" hidden></div>
+    <div class="lbl" id="lastBk" style="margin-top:10px"></div>
   </section>
 </div>
-<div class="toast" id="toast"><span id="tmsg"></span><button id="undo" hidden>Annuler</button></div>
+<div class="toast" id="toast" role="status"><span id="tmsg"></span><button id="undo" hidden>Annuler</button></div>
 
 <script>
 {
@@ -172,93 +297,258 @@ const M=[
  {k:'mtn',n:'MTN MoMo',c:'#f2c200'},
  {k:'moov',n:'Moov Money',c:'#0066b3'},
  {k:'wave',n:'Wave',c:'#1dc8ff'}];
+const PC=['#2f6fdb','#d9480f','#7b3fc4','#0b8a6b','#c2185b','#5c6b00','#00838f','#8d4a12'];
+const SHOPS=[
+ {k:'jus',n:'Vente de jus',d:'Bissap, gnamankoudji…',p:[['Bissap',100],['Gnamankoudji',100],['Jus de bouye',100],['Tamarin',100],['Grande bouteille',500]],x:['Sucre','Bissap / gingembre','Sachets','Glace','Transport']},
+ {k:'maquis',n:'Maquis / restaurant',d:'Garba, attiéké, alloco…',p:[['Garba',500],['Attiéké poisson',1000],['Alloco',500],['Riz sauce',500],['Boisson',500],['Eau',200]],x:['Marché','Poisson / viande','Gaz','Charbon','Boissons','Salaire']},
+ {k:'boutique',n:'Boutique',d:'Riz, sucre, huile, savon…',p:[['Riz 1 kg',500],['Sucre 1 kg',800],['Huile 1 L',1500],['Savon',250],['Lait sachet',100],['Pain',150]],x:['Marchandises','Transport','Électricité','Loyer']},
+ {k:'cantine',n:'Cantine / internat',d:'Repas des élèves, achats…',meal:true,p:[['Petit-déjeuner',200],['Déjeuner',500],['Dîner',500]],x:['Riz','Huile','Poisson / viande','Légumes','Gaz / charbon','Condiments','Cuisinière']},
+ {k:'autre',n:'Autre commerce',d:'Je mets mes produits',p:[],x:['Achats','Transport','Électricité']}];
+const shopOf=()=>SHOPS.find(x=>x.k===db.shop)||SHOPS[SHOPS.length-1];
 const KEY='caisse-mm-v1';
-let db={days:{},demo:false};
-const load=()=>{try{const r=localStorage.getItem(KEY);if(r)return JSON.parse(r)}catch(e){}return null};
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}};
-const iso=d=>{const z=new Date(d.getTime()-d.getTimezoneOffset()*6e4);return z.toISOString().slice(0,10)};
-const today=iso(new Date());
-let cur=today,type='in',meth='esp',lastDel=null,tt;
 const $=id=>document.getElementById(id);
-const F=n=>Math.round(n).toLocaleString('fr-FR').replace(/ | /g,' ')+' F';
+const iso=d=>{const z=new Date(d.getTime()-d.getTimezoneOffset()*6e4);return z.toISOString().slice(0,10)};
+const dt=s=>new Date(s+'T12:00:00');
+const F=n=>(n<0?'−':'')+Math.round(Math.abs(n)).toLocaleString('fr-FR').replace(/ | /g,' ')+' F';
+const fmt=v=>v?v.toLocaleString('fr-FR').replace(/ | /g,' '):'';
 const num=s=>parseInt(String(s).replace(/\D/g,''),10)||0;
-const day=()=>db.days[cur]||(db.days[cur]={fond:0,compte:null,ops:[]});
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-
-const saved=load();
-if(saved){db=saved}else{
- db.demo=true;
- const s=[['in','esp',3500,'Pain + lait','07:40'],['in','om',12000,'Sac de riz 25 kg','09:15'],['in','wave',4500,'Huile 5 L','10:02'],['out','esp',2000,'Transport marchandises','11:30'],['in','mtn',6000,'Savon x12','13:10'],['in','esp',8000,'Sucre + café','15:45'],['out','om',5000,'Facture électricité','16:20'],['in','moov',2500,'Recharge crédit','17:05']];
- db.days[today]={fond:10000,compte:null,ops:s.map(([t,m,a,n,h])=>({id:uid(),t,m,a,n,h}))};
-}
-
-const tot=d=>{const r={};M.forEach(x=>r[x.k]={i:0,o:0});d.ops.forEach(o=>{if(r[o.m])r[o.m][o.t==='in'?'i':'o']+=o.a});return r};
-
-function render(){
- const d=day(),r=tot(d);
- let I=0,O=0;M.forEach(x=>{I+=r[x.k].i;O+=r[x.k].o});
- const P=I-O;
- $('day').value=cur;
- $('profLbl').textContent=cur===today?'Bénéfice du jour':'Bénéfice du '+new Date(cur+'T12:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
- const p=$('profit');p.textContent=(P>0?'+':'')+F(P);p.className='big '+(P>0?'pos':P<0?'neg':'');
- $('tIn').textContent=F(I);$('tOut').textContent=F(O);
- $('bar').innerHTML=I?M.filter(x=>r[x.k].i).map(x=>`<span style="width:${r[x.k].i/I*100}%;background:${x.c}" title="${x.n}"></span>`).join(''):'';
- $('leg').innerHTML=I?M.filter(x=>r[x.k].i).map(x=>`<span><i class="dot" style="background:${x.c}"></i>${x.n} ${Math.round(r[x.k].i/I*100)} %</span>`).join(''):'<span>Aucune vente enregistrée pour ce jour.</span>';
- $('tbody').innerHTML=M.map(x=>{const v=r[x.k];return `<tr><td><i class="dot" style="background:${x.c}"></i>${x.n}</td><td>${F(v.i)}</td><td>${F(v.o)}</td><td>${F(v.i-v.o)}</td></tr>`}).join('');
- $('fIn').textContent=F(I);$('fOut').textContent=F(O);$('fSol').textContent=F(P);
- if(document.activeElement!==$('fond'))$('fond').value=d.fond?d.fond:'';
- if(document.activeElement!==$('compte'))$('compte').value=d.compte==null?'':d.compte;
- const att=d.fond+r.esp.i-r.esp.o;
- $('attendu').textContent='Espèces attendues dans le tiroir : '+F(att);
- const e=$('ecart');
- if(d.compte==null){e.textContent='';}
- else{const g=d.compte-att;e.textContent=g===0?'Caisse juste ✓':g>0?'Surplus : +'+F(g):'Il manque : '+F(-g);e.style.color=g===0?'var(--pos)':g>0?'var(--ink)':'var(--neg)'}
- const ops=[...d.ops].sort((a,b)=>b.h.localeCompare(a.h));
- $('ops').innerHTML=ops.length?ops.map(o=>{const m=M.find(x=>x.k===o.m)||M[0];return `<li><span class="s" style="background:${m.c}"></span><div class="i">${esc(o.n||(o.t==='in'?'Vente':'Dépense'))}<small>${o.h} · ${m.n}</small></div><span class="m" style="color:${o.t==='in'?'var(--pos)':'var(--neg)'}">${o.t==='in'?'+':'−'}${F(o.a)}</span><button class="del" data-id="${o.id}" aria-label="Supprimer">✕</button></li>`}).join(''):'<li class="empty">Rien pour ce jour. Ajoutez votre première vente ci-dessus.</li>';
- $('demo').hidden=!db.demo;
- $('wa').href='https://wa.me/?text='+encodeURIComponent(summary());
-}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const today=iso(new Date());
+let db=null;
+try{const r=localStorage.getItem(KEY);if(r)db=JSON.parse(r)}catch(e){}
+if(!db||typeof db.days!=='object')db={days:{},demo:false};
+if(!Array.isArray(db.produits))db.produits=[];
+if(!('shop' in db))db.shop=null;
+if(!db.meth)db.meth='esp';
+if(!Array.isArray(db.dep))db.dep=null;
+if(!Array.isArray(db.eleves))db.eleves=[];
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}};
+let cur=today,type='in',bm='w',undoFn=null,tt,pending=null,mealId=null,openK=null,lowOnly=false,delAsk=null;
+const day=k=>{k=k||cur;return db.days[k]||(db.days[k]={fond:0,compte:null,ops:[]})};
+const peek=k=>db.days[k]||{fond:0,compte:null,ops:[]};
+const hm=()=>{const n=new Date();return String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')};
+const longDate=s=>dt(s).toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+
+function sums(d){const r={I:0,O:0,m:{}};M.forEach(x=>r.m[x.k]={i:0,o:0});d.ops.forEach(o=>{const t=r.m[o.m]||r.m.esp;if(o.t==='in'){t.i+=o.a;r.I+=o.a}else if(o.t==='out'){t.o+=o.a;r.O+=o.a}});return r}
+
+function toast(msg,fn){$('tmsg').textContent=msg;$('undo').textContent='Annuler';undoFn=fn||null;$('undo').hidden=!fn;const el=$('toast');el.style.display='flex';clearTimeout(tt);tt=setTimeout(()=>{el.style.display='none';undoFn=null},fn?6000:2400)}
+$('undo').onclick=()=>{if(undoFn)undoFn();undoFn=null;$('toast').style.display='none';save();render()};
+
+/* ---------- render ---------- */
+function render(){
+ const d=peek(cur),r=sums(d),P=r.I-r.O;
+ $('setup').hidden=db.shop!==null;
+ $('demo').hidden=!db.demo;
+ $('day').value=cur;
+ $('profLbl').textContent=cur===today?'Bénéfice du jour':'Bénéfice du '+longDate(cur);
+ const p=$('profit');p.textContent=(P>0?'+':'')+F(P);p.className='big '+(P>0?'pos':P<0?'neg':'');
+ $('tIn').textContent=F(r.I);$('tOut').textContent=F(r.O);
+ const used=M.filter(x=>r.m[x.k].i);
+ $('bar').innerHTML=used.map(x=>`<span style="width:${r.m[x.k].i/r.I*100}%;background:${x.c}"></span>`).join('');
+ $('leg').innerHTML=r.I?used.map(x=>`<span><i class="dot" style="background:${x.c}"></i>${x.n} ${Math.round(r.m[x.k].i/r.I*100)} %</span>`).join(''):'<span>Aucune vente pour ce jour.</span>';
+ // shop labels & frequent expenses
+ const sh=shopOf(),meal=!!sh.meal;
+ $('qTitle').textContent=meal?'Repas servis':'Vente rapide';
+ $('qHint').textContent=meal?'Touchez le repas servi (1 toucher = 1 repas payé)':'Touchez le produit vendu (1 toucher = 1 vente)';
+ $('deps').innerHTML=(db.dep||sh.x).map(n=>`<button data-dep="${esc(n)}">${esc(n)}</button>`).join('');
+ // methods
+ $('meth').innerHTML=M.map(x=>`<button data-m="${x.k}" class="${db.meth===x.k?'on':''}" style="border-left:8px solid ${x.c}">${x.n}</button>`).join('');
+ // products
+ const cnt={};d.ops.forEach(o=>{if(o.pid)cnt[o.pid]=(cnt[o.pid]||0)+1});
+ $('prods').innerHTML=db.produits.length?db.produits.map((x,i)=>`<button class="prod" data-p="${x.id}" style="background:${PC[i%PC.length]}">${esc(x.n)}<b>${F(x.p)}</b>${cnt[x.id]?`<span class="n">${cnt[x.id]}</span>`:''}</button>`).join(''):'<p class="hint">Pas encore de produit. Ouvrez « Changer mes produits » pour en ajouter.</p>';
+ if(!$('pmgr').contains(document.activeElement))
+  $('plist').innerHTML=db.produits.map(x=>`<li><input value="${esc(x.n)}" data-e="n" data-id="${x.id}" aria-label="Nom"><input value="${fmt(x.p)}" inputmode="numeric" data-e="p" data-id="${x.id}" aria-label="Prix"><button class="x" data-rm="${x.id}" aria-label="Supprimer ${esc(x.n)}">✕</button></li>`).join('');
+ // table
+ $('tbody').innerHTML=M.map(x=>{const v=r.m[x.k];return `<tr><td><i class="dot" style="background:${x.c}"></i>${x.n}</td><td>${F(v.i)}</td><td>${F(v.o)}</td><td>${F(v.i-v.o)}</td></tr>`}).join('');
+ $('fIn').textContent=F(r.I);$('fOut').textContent=F(r.O);$('fSol').textContent=F(P);
+ if(document.activeElement!==$('fond'))$('fond').value=fmt(d.fond);
+ if(document.activeElement!==$('compte'))$('compte').value=d.compte==null?'':fmt(d.compte)||'0';
+ const att=d.fond+r.m.esp.i-r.m.esp.o;
+ $('attendu').textContent='Espèces qu\'il doit y avoir : '+F(att);
+ const e=$('ecart');
+ if(d.compte==null)e.textContent='';
+ else{const g=d.compte-att;e.textContent=g===0?'Caisse juste ✓':g>0?'Surplus : +'+F(g):'Il manque : '+F(-g);e.style.color=g===0?'var(--pos)':g>0?'var(--ink)':'var(--neg)'}
+ // ops
+ const ops=[...d.ops].sort((a,b)=>b.h.localeCompare(a.h));
+ $('ops').innerHTML=ops.length?ops.map(o=>{const m=M.find(x=>x.k===o.m)||M[0];return `<li><span class="s" style="background:${m.c}"></span><div class="i">${esc(o.n||(o.t==='in'?'Vente':'Dépense'))}<small>${o.h} · ${o.t==='meal'?'payé par le compte':m.n}</small></div><span class="m ${o.t==='in'?'pos':o.t==='out'?'neg':'lbl'}">${o.t==='in'?'+':o.t==='out'?'−':''}${F(o.a)}</span><button class="del" data-id="${o.id}" aria-label="Supprimer">✕</button></li>`}).join(''):'<li class="empty">Rien pour ce jour.</li>';
+ $('wa').href='https://wa.me/?text='+encodeURIComponent(summary());
+ renderAcc();renderBilan();renderBk();
+}
+
+function period(){
+ const d=dt(cur);let s,n;
+ if(bm==='w'){s=new Date(d);s.setDate(d.getDate()-((d.getDay()+6)%7));n=7}
+ else{s=new Date(d.getFullYear(),d.getMonth(),1,12);n=new Date(d.getFullYear(),d.getMonth()+1,0).getDate()}
+ return Array.from({length:n},(_,i)=>{const x=new Date(s);x.setDate(s.getDate()+i);return iso(x)});
+}
+function renderBilan(){
+ const ks=period();let I=0,O=0;const byM={},byP={};
+ const rows=ks.map(k=>{const d=peek(k),r=sums(d);I+=r.I;O+=r.O;M.forEach(x=>byM[x.k]=(byM[x.k]||0)+r.m[x.k].i);d.ops.forEach(o=>{if(o.pid&&(o.t==='in'||o.t==='meal')){const pn=o.pn||o.n;byP[pn]=(byP[pn]||0)+1}});return{k,P:r.I-r.O,n:d.ops.length}});
+ const a=dt(ks[0]),b=dt(ks[ks.length-1]);
+ $('bPer').textContent=bm==='w'?`Semaine du ${a.toLocaleDateString('fr-FR',{day:'numeric',month:'long'})} au ${b.toLocaleDateString('fr-FR',{day:'numeric',month:'long'})}`:'Mois de '+a.toLocaleDateString('fr-FR',{month:'long',year:'numeric'});
+ const P=I-O,bp=$('bProf');bp.textContent='Bénéfice : '+(P>0?'+':'')+F(P);bp.className='big mid '+(P>0?'pos':P<0?'neg':'');
+ $('bIn').textContent=F(I);$('bOut').textContent=F(O);
+ const mx=Math.max(1,...rows.map(x=>Math.abs(x.P)));
+ const W=['L','M','M','J','V','S','D'];
+ $('bCols').innerHTML=rows.map((x,i)=>{const d=dt(x.k).getDate();const lab=bm==='w'?W[i]:(d===1||d%5===0?d:'');return `<button class="col${x.k===cur?' cur':''}" data-d="${x.k}" aria-label="${longDate(x.k)} : ${F(x.P)}"><span class="b${x.P<0?' neg':''}" style="height:${x.n?Math.max(3,Math.abs(x.P)/mx*100):0}%"></span><small>${lab}</small></button>`}).join('');
+ const act=rows.filter(x=>x.n);
+ const best=act.length?act.reduce((p,c)=>c.P>p.P?c:p):null;
+ const topM=M.reduce((p,c)=>(byM[c.k]||0)>(byM[p.k]||0)?c:p);
+ const topP=Object.entries(byP).sort((p,c)=>c[1]-p[1])[0];
+ const f=[['Jours de travail',act.length+' jour'+(act.length>1?'s':'')],
+  ['Bénéfice moyen par jour',act.length?F(P/act.length):'—'],
+  ['Meilleur jour',best?`${dt(best.k).toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'})} · ${F(best.P)}`:'—'],
+  ['Paiement le plus utilisé',I?`${topM.n} (${Math.round((byM[topM.k]||0)/I*100)} %)`:'—']];
+ const nbP=Object.values(byP).reduce((s,c)=>s+c,0);
+ if(shopOf().meal){f.unshift(['Repas servis',nbP+' repas']);if(db.eleves.length)f.push(['Argent sur les comptes élèves',F(totalSoldes())]);if(nbP)f.push(['Coût par repas',F(O/nbP)]);Object.entries(byP).forEach(([n,c])=>f.push([esc(n),c+' servis']))}
+ else if(topP)f.push(['Produit le plus vendu',`${esc(topP[0])} (${topP[1]} fois)`]);
+ $('bFacts').innerHTML=f.map(([l,v])=>`<li><span>${l}</span><b>${v}</b></li>`).join('');
+}
+
+function renderBk(){
+ const w=$('bkWarn'),l=$('lastBk');
+ const hasData=Object.values(db.days).some(d=>d.ops.length);
+ if(db.lastBk){const j=Math.floor((Date.now()-db.lastBk)/864e5);l.textContent='Dernière sauvegarde : '+(j===0?'aujourd\'hui':j===1?'hier':'il y a '+j+' jours');w.hidden=!(j>=7&&hasData);w.textContent='Votre dernière sauvegarde date de plus d\'une semaine. Pensez à sauvegarder.'}
+ else{l.textContent='Aucune sauvegarde pour le moment.';w.hidden=!(hasData&&!db.demo);w.textContent='Vous n\'avez jamais sauvegardé. Touchez « Sauvegarder ».'}
+}
 
 function summary(){
- const d=day(),r=tot(d);let I=0,O=0;M.forEach(x=>{I+=r[x.k].i;O+=r[x.k].o});
- const dt=new Date(cur+'T12:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
- let t=`*Point de caisse – ${dt}*\n\nVentes : ${F(I)}\nDépenses : ${F(O)}\n*Bénéfice : ${F(I-O)}*\n\n`;
- M.forEach(x=>{const v=r[x.k];if(v.i||v.o)t+=`${x.n} : ${F(v.i-v.o)}\n`});
- const att=d.fond+r.esp.i-r.esp.o;t+=`\nEspèces attendues : ${F(att)}`;
+ const d=peek(cur),r=sums(d);
+ let t=`*Point de caisse – ${longDate(cur)}*\n\nVentes : ${F(r.I)}\nDépenses : ${F(r.O)}\n*Bénéfice : ${F(r.I-r.O)}*\n\n`;
+ M.forEach(x=>{const v=r.m[x.k];if(v.i||v.o)t+=`${x.n} : ${F(v.i-v.o)}\n`});
+ const cnt={};d.ops.forEach(o=>{if(o.pid){const pn=o.pn||o.n;cnt[pn]=(cnt[pn]||0)+1}});
+ const pl=Object.entries(cnt);if(pl.length)t+=(shopOf().meal?'\nRepas servis :\n':'\nProduits vendus :\n')+pl.map(([n,c])=>`${n} : ${c}`).join('\n')+'\n';
+ const att=d.fond+r.m.esp.i-r.m.esp.o;t+=`\nEspèces attendues : ${F(att)}`;
  if(d.compte!=null){const g=d.compte-att;t+=`\nEspèces comptées : ${F(d.compte)}\n${g===0?'Caisse juste':g>0?'Surplus : '+F(g):'Manque : '+F(-g)}`}
  return t;
 }
 
-function toast(msg,undo){$('tmsg').textContent=msg;$('undo').hidden=!undo;const el=$('toast');el.style.display='flex';clearTimeout(tt);tt=setTimeout(()=>el.style.display='none',undo?5000:2200)}
+/* ---------- student accounts ---------- */
+function soldes(){const r={};db.eleves.forEach(k=>r[k.id]=0);Object.values(db.days).forEach(d=>d.ops.forEach(o=>{if(o.eid&&o.eid in r){if(o.t==='in')r[o.eid]+=o.a;else if(o.t==='meal')r[o.eid]-=o.a}}));return r}
+const totalSoldes=()=>Object.values(soldes()).reduce((s,v)=>s+Math.max(0,v),0);
+const meals=()=>db.produits;
+function kidHist(id){const h=[];Object.keys(db.days).sort().reverse().forEach(k=>db.days[k].ops.forEach(o=>{if(o.eid===id)h.push({k,o})}));return h.sort((a,b)=>(b.k+b.o.h).localeCompare(a.k+a.o.h))}
+function renderAcc(){
+ const on=!!shopOf().meal&&db.shop!==null;$('acc').hidden=!on;if(!on)return;
+ const ms=meals();if(!ms.find(x=>x.id===mealId)){const hr=new Date().getHours();mealId=(ms[hr<10?0:hr<16?1:2]||ms[0]||{}).id||null}
+ $('aMeal').innerHTML=ms.map(x=>`<button data-meal="${x.id}" class="${x.id===mealId?'on':''}">${esc(x.n)} · ${F(x.p)}</button>`).join('')||'<span class="hint">Ajoutez d\'abord les repas dans « Changer mes produits ».</span>';
+ const so=soldes(),meal=ms.find(x=>x.id===mealId),price=meal?meal.p:0;
+ $('aN').textContent=db.eleves.length;$('aTot').textContent=F(Object.values(so).reduce((s,v)=>s+Math.max(0,v),0));
+ const served={};peek(cur).ops.forEach(o=>{if(o.t==='meal'&&o.pid===mealId)served[o.eid]=o.id});
+ const q=$('aQ').value.trim().toLowerCase();
+ let list=db.eleves.filter(k=>!q||(k.n+' '+(k.c||'')).toLowerCase().includes(q));
+ if(lowOnly)list=list.filter(k=>so[k.id]<price);
+ list.sort((a,b)=>a.n.localeCompare(b.n,'fr'));
+ $('aLow').classList.toggle('on',lowOnly);$('aLow').style.cssText=lowOnly?'background:var(--acc);color:var(--acci)':'';
+ $('kids').innerHTML=list.length?list.map(k=>{const v=so[k.id];const cls=v<0?'neg':v<price?'low':'pos';
+  const st=v<0?`doit ${F(-v)}`:v<price?`${F(v)} · à recharger`:F(v);
+  return `<li><div class="krow"><button class="kname" data-open="${k.id}">${esc(k.n)}<small>${esc(k.c||'')}${k.c?' · ':''}<b class="${cls}">${st}</b></small></button>${meal?(served[k.id]?`<button class="serve done" data-un="${served[k.id]}">✓ Servi</button>`:`<button class="serve" data-serve="${k.id}">Servir</button>`):''}</div>${openK===k.id?kidDetail(k,v):''}</li>`}).join(''):`<li class="empty">${db.eleves.length?'Aucun élève trouvé.':'Aucun élève. Ouvrez « Ajouter un élève » ci-dessous.'}</li>`;
+}
+function kidDetail(k,v){
+ const tel=(k.t||'').replace(/\D/g,'');const wn=tel.length===10?'225'+tel:tel;
+ const msg=`Bonjour, le compte cantine de ${k.n} est à ${v<0?'−':''}${F(Math.abs(v))}${v<0?' (dette)':''}. Merci de le recharger. — La cantine`;
+ const h=kidHist(k.id).slice(0,8);
+ return `<div class="kdet"><div class="lbl">Solde du compte</div><div class="big mid ${v<0?'neg':'pos'}">${v<0?'−':''}${F(Math.abs(v))}</div>
+ <label style="margin-top:0">Recharger (paiement en : ${(M.find(x=>x.k===db.meth)||M[0]).n})</label>
+ <div class="row"><input class="txt" id="rA" inputmode="numeric" placeholder="Montant" style="flex:1 1 140px"><button class="sm" data-rq="1000">+1 000</button><button class="sm" data-rq="5000">+5 000</button><button class="sm" data-rq="10000">+10 000</button></div>
+ <button class="go" data-recharge="${k.id}" style="margin-top:8px">Recharger le compte</button>
+ <div class="acts" style="margin-top:8px">${wn?`<a class="wa" href="https://wa.me/${wn}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Prévenir le parent</a>`:'<button disabled>Pas de numéro</button>'}<button data-del="${k.id}">${delAsk===k.id?'Confirmer la suppression':'Supprimer l\'élève'}</button></div>
+ ${k.t?`<div class="hint">Parent : ${esc(k.t)}</div>`:''}
+ <ul>${h.length?h.map(({k:d,o})=>`<li><span>${dt(d).toLocaleDateString('fr-FR',{day:'numeric',month:'short'})} ${o.h} · ${o.t==='in'?'Recharge':esc(o.pn||o.n)}</span><b class="${o.t==='in'?'pos':''}">${o.t==='in'?'+':'−'}${F(o.a)}</b></li>`).join(''):'<li><span>Aucun mouvement</span></li>'}</ul></div>`;
+}
+$('aMeal').addEventListener('click',e=>{const b=e.target.closest('[data-meal]');if(b){mealId=b.dataset.meal;renderAcc()}});
+$('aQ').addEventListener('input',renderAcc);
+$('aLow').onclick=()=>{lowOnly=!lowOnly;renderAcc()};
+$('kids').addEventListener('click',e=>{
+ const t=e.target.closest('button');if(!t)return;const ds=t.dataset;
+ if(ds.open){openK=openK===ds.open?null:ds.open;delAsk=null;renderAcc();return}
+ if(ds.serve){const k=db.eleves.find(x=>x.id===ds.serve),m=meals().find(x=>x.id===mealId);if(!k||!m)return;
+  const before=soldes()[k.id];const kk=cur,op={id:uid(),t:'meal',m:'esp',a:m.p,n:m.n+' – '+k.n,pn:m.n,pid:m.id,eid:k.id,h:hm()};day(kk).ops.push(op);save();render();
+  try{navigator.vibrate&&navigator.vibrate(30)}catch(_){}
+  const after=before-m.p;toast(after<0?`${k.n} servi · solde insuffisant, doit ${F(-after)}`:`${k.n} servi · reste ${F(after)}`,()=>{const d=day(kk);d.ops=d.ops.filter(o=>o.id!==op.id)});return}
+ if(ds.un){const d=day();const o=d.ops.find(x=>x.id===ds.un);toast('Déjà servi pour ce repas aujourd\'hui',()=>{d.ops=d.ops.filter(x=>x.id!==ds.un)});$('undo').textContent='Annuler le repas';return}
+ if(ds.rq){const i=$('rA');i.value=fmt(num(i.value)+ +ds.rq);return}
+ if(ds.recharge){const a=num($('rA').value);if(!a){toast('Entrez le montant de la recharge');$('rA').focus();return}const k=db.eleves.find(x=>x.id===ds.recharge);
+  const kk=cur,op={id:uid(),t:'in',m:db.meth,a,n:'Recharge – '+k.n,eid:k.id,h:hm()};day(kk).ops.push(op);save();render();toast(`Compte de ${k.n} rechargé : +${F(a)}`,()=>{const d=day(kk);d.ops=d.ops.filter(o=>o.id!==op.id)});return}
+ if(ds.del){if(delAsk!==ds.del){delAsk=ds.del;renderAcc();return}const i=db.eleves.findIndex(x=>x.id===ds.del);const [k]=db.eleves.splice(i,1);openK=null;delAsk=null;save();render();toast(k.n+' supprimé',()=>db.eleves.splice(i,0,k))}
+});
+$('kids').addEventListener('input',e=>{if(e.target.id==='rA')e.target.value=fmt(num(e.target.value))});
+$('kAdd').onclick=()=>{const n=$('kN').value.trim();if(!n){$('kN').focus();toast('Entrez le nom de l\'élève');return}
+ db.eleves.push({id:uid(),n,c:$('kC').value.trim(),t:$('kT').value.trim()});$('kN').value='';save();render();$('kN').focus();toast(n+' ajouté. Rechargez son compte en touchant son nom.')};
+$('kN').addEventListener('keydown',e=>{if(e.key==='Enter')$('kAdd').click()});
 
-$('meth').innerHTML=M.map(x=>`<button data-m="${x.k}" style="border-left:8px solid ${x.c}">${x.n}</button>`).join('');
-const setMeth=k=>{meth=k;document.querySelectorAll('#meth button').forEach(b=>b.classList.toggle('on',b.dataset.m===k))};
-setMeth('esp');
-$('meth').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setMeth(b.dataset.m)});
+/* ---------- setup ---------- */
+$('shops').innerHTML=SHOPS.map(s=>`<button data-s="${s.k}">${s.n}<small>${s.d}</small></button>`).join('');
+$('shops').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const s=SHOPS.find(x=>x.k===b.dataset.s);
+ db.shop=s.k;db.produits=s.p.map(([n,p])=>({id:uid(),n,p}));db.dep=s.x.slice();save();render();
+ if(!s.p.length)$('pmgr').open=true;
+ toast(s.p.length?'Produits prêts. Adaptez les prix si besoin.':'Ajoutez vos produits ci-dessous');});
+$('reshop').onclick=()=>{db.shop=null;save();render();window.scrollTo({top:0,behavior:'smooth'})};
+$('clearDemo').onclick=()=>{db.days={};db.demo=false;save();render();toast('Exemples effacés')};
+
+/* ---------- quick sale ---------- */
+$('meth').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;db.meth=b.dataset.m;save();render()});
+$('prods').addEventListener('click',e=>{const b=e.target.closest('.prod');if(!b)return;const p=db.produits.find(x=>x.id===b.dataset.p);if(!p)return;
+ const k=cur,op={id:uid(),t:'in',m:db.meth,a:p.p,n:p.n,h:hm(),pid:p.id};day(k).ops.push(op);save();render();
+ try{navigator.vibrate&&navigator.vibrate(30)}catch(_){}
+ toast(`${p.n} ${shopOf().meal?'servi':'vendu'} : ${F(p.p)}`,()=>{const d=day(k);d.ops=d.ops.filter(o=>o.id!==op.id)});});
+$('plist').addEventListener('change',e=>{const i=e.target;const p=db.produits.find(x=>x.id===i.dataset.id);if(!p)return;
+ if(i.dataset.e==='n'){p.n=i.value.trim()||p.n}else{p.p=num(i.value)||p.p}save();i.blur();render()});
+$('plist').addEventListener('click',e=>{const b=e.target.closest('[data-rm]');if(!b)return;const idx=db.produits.findIndex(x=>x.id===b.dataset.rm);if(idx<0)return;
+ const [rm]=db.produits.splice(idx,1);save();b.blur();render();toast(rm.n+' retiré',()=>db.produits.splice(idx,0,rm))});
+function addProd(){const n=$('pn').value.trim(),p=num($('pp').value);if(!n){$('pn').focus();return}if(!p){$('pp').focus();toast('Entrez le prix');return}
+ db.produits.push({id:uid(),n,p});$('pn').value='';$('pp').value='';save();document.activeElement.blur();render();toast(n+' ajouté')}
+$('padd').onclick=addProd;$('pp').addEventListener('keydown',e=>{if(e.key==='Enter')addProd()});
+$('pp').addEventListener('input',e=>{e.target.value=fmt(num(e.target.value))});
+
+/* ---------- manual op ---------- */
 const setType=t=>{type=t;$('tVente').classList.toggle('on',t==='in');$('tDep').classList.toggle('on',t==='out');$('add').textContent=t==='in'?'Ajouter la vente':'Ajouter la dépense'};
 setType('in');
 $('tVente').onclick=()=>setType('in');$('tDep').onclick=()=>setType('out');
-$('amt').addEventListener('input',e=>{const v=num(e.target.value);e.target.value=v?v.toLocaleString('fr-FR').replace(/ | /g,' '):''});
-document.querySelectorAll('.quick button').forEach(b=>b.onclick=()=>{const q=+b.dataset.q;const v=q?num($('amt').value)+q:0;$('amt').value=v?v.toLocaleString('fr-FR').replace(/ | /g,' '):'';$('amt').focus()});
+$('deps').addEventListener('click',e=>{const b=e.target.closest('[data-dep]');if(!b)return;setType('out');$('desc').value=b.dataset.dep;$('amt').focus();toast('Dépense : '+b.dataset.dep+'. Entrez le montant.')});
+$('amt').addEventListener('input',e=>{e.target.value=fmt(num(e.target.value))});
+document.querySelectorAll('.quick button').forEach(b=>b.onclick=()=>{const q=+b.dataset.q;$('amt').value=fmt(q?num($('amt').value)+q:0);$('amt').focus()});
 function add(){
  const a=num($('amt').value);if(!a){toast('Entrez un montant');$('amt').focus();return}
- const n=new Date();const h=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
- day().ops.push({id:uid(),t:type,m:meth,a,n:$('desc').value.trim(),h});
- save();$('amt').value='';$('desc').value='';render();toast((type==='in'?'Vente':'Dépense')+' de '+F(a)+' ajoutée');
+ const k=cur,op={id:uid(),t:type,m:db.meth,a,n:$('desc').value.trim(),h:hm()};day(k).ops.push(op);
+ save();$('amt').value='';$('desc').value='';render();
+ toast((type==='in'?'Vente':'Dépense')+' de '+F(a)+' ajoutée',()=>{const d=day(k);d.ops=d.ops.filter(o=>o.id!==op.id)});
 }
 $('add').onclick=add;
 $('amt').addEventListener('keydown',e=>{if(e.key==='Enter')add()});
 $('desc').addEventListener('keydown',e=>{if(e.key==='Enter')add()});
-$('ops').addEventListener('click',e=>{const b=e.target.closest('.del');if(!b)return;const d=day();const i=d.ops.findIndex(o=>o.id===b.dataset.id);if(i<0)return;lastDel={day:cur,op:d.ops.splice(i,1)[0]};save();render();toast('Opération supprimée',true)});
-$('undo').onclick=()=>{if(!lastDel)return;(db.days[lastDel.day]||(db.days[lastDel.day]={fond:0,compte:null,ops:[]})).ops.push(lastDel.op);lastDel=null;save();render();$('toast').style.display='none'};
-$('fond').addEventListener('input',e=>{day().fond=num(e.target.value);save();render()});
-$('compte').addEventListener('input',e=>{day().compte=e.target.value.trim()===''?null:num(e.target.value);save();render()});
-const shift=n=>{const d=new Date(cur+'T12:00');d.setDate(d.getDate()+n);cur=iso(d);render()};
+$('ops').addEventListener('click',e=>{const b=e.target.closest('.del');if(!b)return;const k=cur,d=day(k);const i=d.ops.findIndex(o=>o.id===b.dataset.id);if(i<0)return;
+ const [op]=d.ops.splice(i,1);save();render();toast('Opération supprimée',()=>day(k).ops.push(op))});
+$('fond').addEventListener('input',e=>{e.target.value=fmt(num(e.target.value));day().fond=num(e.target.value);save();render()});
+$('compte').addEventListener('input',e=>{const v=e.target.value.trim();day().compte=v===''?null:num(v);e.target.value=v===''?'':fmt(num(v))||'0';save();render()});
+
+/* ---------- dates & report ---------- */
+const go=k=>{cur=k;render()};
+const shift=n=>{const d=dt(cur);d.setDate(d.getDate()+n);go(iso(d))};
 $('prev').onclick=()=>shift(-1);$('next').onclick=()=>shift(1);
-$('day').addEventListener('change',e=>{if(e.target.value){cur=e.target.value;render()}});
-$('clearDemo').onclick=()=>{db={days:{},demo:false};save();render();toast('Exemples effacés, à vous de jouer')};
+$('day').addEventListener('change',e=>{if(e.target.value)go(e.target.value)});
+$('bW').onclick=()=>{bm='w';$('bW').classList.add('on');$('bM').classList.remove('on');renderBilan()};
+$('bM').onclick=()=>{bm='m';$('bM').classList.add('on');$('bW').classList.remove('on');renderBilan()};
+$('bCols').addEventListener('click',e=>{const b=e.target.closest('.col');if(b){go(b.dataset.d);window.scrollTo({top:0,behavior:'smooth'})}});
+
+/* ---------- share & backup ---------- */
 $('copy').onclick=async()=>{try{await navigator.clipboard.writeText(summary());toast('Texte copié')}catch(e){toast('Copie impossible sur cet appareil')}};
+const bkFile=()=>{const name='ma-caisse-sauvegarde-'+today+'.json';const txt=JSON.stringify({app:'ma-caisse-du-jour',v:2,date:new Date().toISOString(),db});return{name,txt}};
+$('bk').onclick=()=>{
+ const {name,txt}=bkFile();
+ try{const u=URL.createObjectURL(new Blob([txt],{type:'application/json'}));const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);
+  db.lastBk=Date.now();save();render();toast('Sauvegarde enregistrée dans Téléchargements')}catch(e){toast('Sauvegarde impossible ici')}};
+try{const {name,txt}=bkFile();const f=new File([txt],name,{type:'application/json'});if(navigator.canShare&&navigator.canShare({files:[f]}))$('shareRow').hidden=false}catch(e){}
+$('bkShare').onclick=async()=>{try{const {name,txt}=bkFile();await navigator.share({files:[new File([txt],name,{type:'application/json'})],title:'Sauvegarde Ma Caisse'});db.lastBk=Date.now();save();render()}catch(e){}};
+$('rs').addEventListener('change',e=>{const f=e.target.files[0];e.target.value='';if(!f)return;const rd=new FileReader();
+ rd.onload=()=>{try{const o=JSON.parse(rd.result);const d=o.db||o;if(!d||typeof d.days!=='object')throw 0;
+  const nb=Object.values(d.days).reduce((s,x)=>s+(x.ops?x.ops.length:0),0);pending=d;
+  const a=$('rsAsk');a.hidden=false;a.innerHTML=`<span>Récupérer cette sauvegarde (${nb} opérations) ? Les données actuelles de ce téléphone seront remplacées.</span><span class="row"><button class="sm" id="rsY">Oui, récupérer</button><button class="sm" id="rsN">Non</button></span>`;
+  $('rsY').onclick=()=>{db=pending;if(!Array.isArray(db.produits))db.produits=[];if(!('shop' in db))db.shop=db.produits.length?'autre':null;if(!db.meth)db.meth='esp';if(!Array.isArray(db.eleves))db.eleves=[];db.demo=false;pending=null;a.hidden=true;save();cur=today;render();toast('Données récupérées')};
+  $('rsN').onclick=()=>{pending=null;a.hidden=true}}
+ catch(err){toast('Ce fichier n\'est pas une sauvegarde de Ma Caisse')}};rd.readAsText(f)});
+
 render();
 }
 </script>
