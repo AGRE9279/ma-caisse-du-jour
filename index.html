@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ma Caisse du Jour</title>
+<meta name="theme-color" content="#14181f">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: practical, warm, shopkeeper's tool — big numbers, zero jargon
+   IDEA: a cash-register ticket that tallies itself, one stripe per payment method
+   PICTURE: the day's profit, huge, with a stacked bar of sales by method
+   COLOUR and TYPE: white ground, ink, payment brand colours as stripes; Figtree 800 + Figtree
+   LAYOUT: result on top, then entry form, then per-method table, cash count, history */
+:root{color-scheme:light;--bg:#f6f6f2;--card:#fff;--ink:#14181f;--mute:#5d6470;--line:#e3e3dc;--pos:#137a43;--neg:#c62828;--acc:#14181f;--acci:#fff;--warn:#fff4d6}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#101318;--card:#1a1f27;--ink:#eef0f3;--mute:#9aa3b0;--line:#2a313c;--pos:#4fd18b;--neg:#ff7b7b;--acc:#eef0f3;--acci:#101318;--warn:#3a3214}}
+:root[data-theme=dark]{color-scheme:dark;--bg:#101318;--card:#1a1f27;--ink:#eef0f3;--mute:#9aa3b0;--line:#2a313c;--pos:#4fd18b;--neg:#ff7b7b;--acc:#eef0f3;--acci:#101318;--warn:#3a3214}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Figtree,system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:760px;margin:0 auto;padding:16px max(4vw,14px) 60px}
+h1{font-size:22px;font-weight:800;margin:0}
+h2{font-size:18px;font-weight:800;margin:0 0 12px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.date{display:flex;align-items:center;gap:6px}
+button,input,select{font:inherit;color:inherit}
+.ib{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:18px}
+input[type=date]{height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);padding:0 10px;font-size:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px}
+.hero .lbl{color:var(--mute);font-size:15px}
+.big{font-size:clamp(40px,11vw,64px);font-weight:800;line-height:1.05;white-space:nowrap;margin:2px 0 10px}
+.big.pos{color:var(--pos)}.big.neg{color:var(--neg)}
+.duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-bottom:14px}
+.duo div{border-radius:12px;background:var(--bg);padding:10px 12px}
+.duo b{display:block;font-size:20px;white-space:nowrap}
+.bar{display:flex;height:22px;border-radius:8px;overflow:hidden;background:var(--bg)}
+.bar span{height:100%;transition:width .4s}
+.leg{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-size:14px;color:var(--mute)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--bg);padding:4px;border-radius:14px;margin-bottom:12px}
+.seg button{height:44px;border:0;border-radius:11px;background:transparent;font-weight:600;cursor:pointer}
+.seg button.on{background:var(--acc);color:var(--acci)}
+label{display:block;font-size:14px;color:var(--mute);margin:10px 0 6px}
+.amt{width:100%;height:56px;border-radius:14px;border:1px solid var(--line);background:var(--bg);padding:0 14px;font-size:26px;font-weight:800}
+.txt{width:100%;height:48px;border-radius:12px;border:1px solid var(--line);background:var(--bg);padding:0 12px;font-size:16px}
+.quick{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.quick button{height:40px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-weight:600}
+.meth{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
+.meth button{height:48px;border-radius:12px;border:2px solid var(--line);background:var(--card);cursor:pointer;font-weight:600;text-align:left;padding:0 10px}
+.meth button.on{border-color:var(--ink)}
+.go{width:100%;height:54px;margin-top:14px;border:0;border-radius:14px;background:var(--acc);color:var(--acci);font-size:18px;font-weight:800;cursor:pointer}
+:focus-visible{outline:3px solid #ff7900;outline-offset:2px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--mute);font-weight:600;font-size:13px}
+tfoot td{font-weight:800;border:0}
+.scroll{overflow-x:auto}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.row .txt{flex:1 1 160px}
+.ecart{font-weight:800;margin-top:10px}
+.ops{list-style:none;margin:0;padding:0}
+.ops li{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.ops .s{width:6px;align-self:stretch;border-radius:3px;flex:none}
+.ops .i{flex:1}
+.ops .i small{display:block;color:var(--mute)}
+.ops .m{font-weight:800;white-space:nowrap}
+.ops .del{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:transparent;cursor:pointer;flex:none}
+.empty{color:var(--mute);padding:10px 0}
+.acts{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+.acts a,.acts button{display:flex;align-items:center;justify-content:center;height:50px;border-radius:14px;font-weight:800;text-decoration:none;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:16px}
+.acts a{background:#25d366;color:#08311b;border:0}
+.note{background:var(--warn);border-radius:12px;padding:10px 12px;font-size:14px;margin-bottom:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.note button{height:40px;border-radius:10px;border:1px solid var(--line);background:var(--card);padding:0 12px;cursor:pointer;font-weight:600}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--acc);color:var(--acci);padding:12px 16px;border-radius:12px;font-weight:600;display:none;gap:12px;align-items:center;z-index:9;max-width:92vw}
+.toast button{background:transparent;border:0;color:inherit;text-decoration:underline;cursor:pointer;font-weight:800}
+@media(max-width:600px){.duo b{font-size:17px}}
+@media(prefers-reduced-motion:reduce){.bar span{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <h1>Ma Caisse du Jour</h1>
+    <div class="date">
+      <button class="ib" id="prev" aria-label="Jour précédent">‹</button>
+      <input type="date" id="day" aria-label="Date">
+      <button class="ib" id="next" aria-label="Jour suivant">›</button>
+    </div>
+  </div>
+
+  <div class="note" id="demo" hidden>
+    <span>Ce sont des opérations d'exemple pour voir comment ça marche.</span>
+    <button id="clearDemo">Effacer les exemples</button>
+  </div>
+
+  <section class="card hero">
+    <div class="lbl" id="profLbl">Bénéfice du jour</div>
+    <div class="big" id="profit">0 F</div>
+    <div class="duo">
+      <div><span class="lbl">Ventes</span><b id="tIn">0 F</b></div>
+      <div><span class="lbl">Dépenses</span><b id="tOut">0 F</b></div>
+    </div>
+    <div class="bar" id="bar"></div>
+    <div class="leg" id="leg"></div>
+  </section>
+
+  <section class="card">
+    <h2>Nouvelle opération</h2>
+    <div class="seg" role="group" aria-label="Type">
+      <button id="tVente" class="on">Vente (entrée)</button>
+      <button id="tDep">Dépense (sortie)</button>
+    </div>
+    <label for="amt">Montant (FCFA)</label>
+    <input class="amt" id="amt" inputmode="numeric" placeholder="0" autocomplete="off">
+    <div class="quick">
+      <button data-q="100">+100</button><button data-q="500">+500</button><button data-q="1000">+1 000</button><button data-q="5000">+5 000</button><button data-q="0">Effacer</button>
+    </div>
+    <label>Moyen de paiement</label>
+    <div class="meth" id="meth"></div>
+    <label for="desc">Note (facultatif)</label>
+    <input class="txt" id="desc" placeholder="Ex : 2 sacs de riz, transport…" autocomplete="off">
+    <button class="go" id="add">Ajouter</button>
+  </section>
+
+  <section class="card">
+    <h2>Détail par moyen de paiement</h2>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Moyen</th><th>Entrées</th><th>Sorties</th><th>Solde</th></tr></thead>
+        <tbody id="tbody"></tbody>
+        <tfoot><tr><td>Total</td><td id="fIn"></td><td id="fOut"></td><td id="fSol"></td></tr></tfoot>
+      </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Contrôle des espèces</h2>
+    <div class="row">
+      <div style="flex:1 1 160px"><label for="fond">Fonds de caisse au matin</label><input class="txt" id="fond" inputmode="numeric" placeholder="0"></div>
+      <div style="flex:1 1 160px"><label for="compte">Espèces comptées le soir</label><input class="txt" id="compte" inputmode="numeric" placeholder="Compter le tiroir"></div>
+    </div>
+    <div class="ecart" id="attendu"></div>
+    <div class="ecart" id="ecart"></div>
+  </section>
+
+  <section class="card">
+    <h2>Opérations de la journée</h2>
+    <ul class="ops" id="ops"></ul>
+  </section>
+
+  <section class="card">
+    <h2>Envoyer le point du jour</h2>
+    <div class="acts">
+      <a id="wa" href="#" target="_blank" rel="noopener">WhatsApp</a>
+      <button id="copy">Copier le texte</button>
+    </div>
+    <label style="margin-top:12px">Les données restent dans ce téléphone, dans ce navigateur.</label>
+  </section>
+</div>
+<div class="toast" id="toast"><span id="tmsg"></span><button id="undo" hidden>Annuler</button></div>
+
+<script>
+{
+const M=[
+ {k:'esp',n:'Espèces',c:'#2f7d4f'},
+ {k:'om',n:'Orange Money',c:'#ff7900'},
+ {k:'mtn',n:'MTN MoMo',c:'#f2c200'},
+ {k:'moov',n:'Moov Money',c:'#0066b3'},
+ {k:'wave',n:'Wave',c:'#1dc8ff'}];
+const KEY='caisse-mm-v1';
+let db={days:{},demo:false};
+const load=()=>{try{const r=localStorage.getItem(KEY);if(r)return JSON.parse(r)}catch(e){}return null};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}};
+const iso=d=>{const z=new Date(d.getTime()-d.getTimezoneOffset()*6e4);return z.toISOString().slice(0,10)};
+const today=iso(new Date());
+let cur=today,type='in',meth='esp',lastDel=null,tt;
+const $=id=>document.getElementById(id);
+const F=n=>Math.round(n).toLocaleString('fr-FR').replace(/ | /g,' ')+' F';
+const num=s=>parseInt(String(s).replace(/\D/g,''),10)||0;
+const day=()=>db.days[cur]||(db.days[cur]={fond:0,compte:null,ops:[]});
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+
+const saved=load();
+if(saved){db=saved}else{
+ db.demo=true;
+ const s=[['in','esp',3500,'Pain + lait','07:40'],['in','om',12000,'Sac de riz 25 kg','09:15'],['in','wave',4500,'Huile 5 L','10:02'],['out','esp',2000,'Transport marchandises','11:30'],['in','mtn',6000,'Savon x12','13:10'],['in','esp',8000,'Sucre + café','15:45'],['out','om',5000,'Facture électricité','16:20'],['in','moov',2500,'Recharge crédit','17:05']];
+ db.days[today]={fond:10000,compte:null,ops:s.map(([t,m,a,n,h])=>({id:uid(),t,m,a,n,h}))};
+}
+
+const tot=d=>{const r={};M.forEach(x=>r[x.k]={i:0,o:0});d.ops.forEach(o=>{if(r[o.m])r[o.m][o.t==='in'?'i':'o']+=o.a});return r};
+
+function render(){
+ const d=day(),r=tot(d);
+ let I=0,O=0;M.forEach(x=>{I+=r[x.k].i;O+=r[x.k].o});
+ const P=I-O;
+ $('day').value=cur;
+ $('profLbl').textContent=cur===today?'Bénéfice du jour':'Bénéfice du '+new Date(cur+'T12:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+ const p=$('profit');p.textContent=(P>0?'+':'')+F(P);p.className='big '+(P>0?'pos':P<0?'neg':'');
+ $('tIn').textContent=F(I);$('tOut').textContent=F(O);
+ $('bar').innerHTML=I?M.filter(x=>r[x.k].i).map(x=>`<span style="width:${r[x.k].i/I*100}%;background:${x.c}" title="${x.n}"></span>`).join(''):'';
+ $('leg').innerHTML=I?M.filter(x=>r[x.k].i).map(x=>`<span><i class="dot" style="background:${x.c}"></i>${x.n} ${Math.round(r[x.k].i/I*100)} %</span>`).join(''):'<span>Aucune vente enregistrée pour ce jour.</span>';
+ $('tbody').innerHTML=M.map(x=>{const v=r[x.k];return `<tr><td><i class="dot" style="background:${x.c}"></i>${x.n}</td><td>${F(v.i)}</td><td>${F(v.o)}</td><td>${F(v.i-v.o)}</td></tr>`}).join('');
+ $('fIn').textContent=F(I);$('fOut').textContent=F(O);$('fSol').textContent=F(P);
+ if(document.activeElement!==$('fond'))$('fond').value=d.fond?d.fond:'';
+ if(document.activeElement!==$('compte'))$('compte').value=d.compte==null?'':d.compte;
+ const att=d.fond+r.esp.i-r.esp.o;
+ $('attendu').textContent='Espèces attendues dans le tiroir : '+F(att);
+ const e=$('ecart');
+ if(d.compte==null){e.textContent='';}
+ else{const g=d.compte-att;e.textContent=g===0?'Caisse juste ✓':g>0?'Surplus : +'+F(g):'Il manque : '+F(-g);e.style.color=g===0?'var(--pos)':g>0?'var(--ink)':'var(--neg)'}
+ const ops=[...d.ops].sort((a,b)=>b.h.localeCompare(a.h));
+ $('ops').innerHTML=ops.length?ops.map(o=>{const m=M.find(x=>x.k===o.m)||M[0];return `<li><span class="s" style="background:${m.c}"></span><div class="i">${esc(o.n||(o.t==='in'?'Vente':'Dépense'))}<small>${o.h} · ${m.n}</small></div><span class="m" style="color:${o.t==='in'?'var(--pos)':'var(--neg)'}">${o.t==='in'?'+':'−'}${F(o.a)}</span><button class="del" data-id="${o.id}" aria-label="Supprimer">✕</button></li>`}).join(''):'<li class="empty">Rien pour ce jour. Ajoutez votre première vente ci-dessus.</li>';
+ $('demo').hidden=!db.demo;
+ $('wa').href='https://wa.me/?text='+encodeURIComponent(summary());
+}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function summary(){
+ const d=day(),r=tot(d);let I=0,O=0;M.forEach(x=>{I+=r[x.k].i;O+=r[x.k].o});
+ const dt=new Date(cur+'T12:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+ let t=`*Point de caisse – ${dt}*\n\nVentes : ${F(I)}\nDépenses : ${F(O)}\n*Bénéfice : ${F(I-O)}*\n\n`;
+ M.forEach(x=>{const v=r[x.k];if(v.i||v.o)t+=`${x.n} : ${F(v.i-v.o)}\n`});
+ const att=d.fond+r.esp.i-r.esp.o;t+=`\nEspèces attendues : ${F(att)}`;
+ if(d.compte!=null){const g=d.compte-att;t+=`\nEspèces comptées : ${F(d.compte)}\n${g===0?'Caisse juste':g>0?'Surplus : '+F(g):'Manque : '+F(-g)}`}
+ return t;
+}
+
+function toast(msg,undo){$('tmsg').textContent=msg;$('undo').hidden=!undo;const el=$('toast');el.style.display='flex';clearTimeout(tt);tt=setTimeout(()=>el.style.display='none',undo?5000:2200)}
+
+$('meth').innerHTML=M.map(x=>`<button data-m="${x.k}" style="border-left:8px solid ${x.c}">${x.n}</button>`).join('');
+const setMeth=k=>{meth=k;document.querySelectorAll('#meth button').forEach(b=>b.classList.toggle('on',b.dataset.m===k))};
+setMeth('esp');
+$('meth').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setMeth(b.dataset.m)});
+const setType=t=>{type=t;$('tVente').classList.toggle('on',t==='in');$('tDep').classList.toggle('on',t==='out');$('add').textContent=t==='in'?'Ajouter la vente':'Ajouter la dépense'};
+setType('in');
+$('tVente').onclick=()=>setType('in');$('tDep').onclick=()=>setType('out');
+$('amt').addEventListener('input',e=>{const v=num(e.target.value);e.target.value=v?v.toLocaleString('fr-FR').replace(/ | /g,' '):''});
+document.querySelectorAll('.quick button').forEach(b=>b.onclick=()=>{const q=+b.dataset.q;const v=q?num($('amt').value)+q:0;$('amt').value=v?v.toLocaleString('fr-FR').replace(/ | /g,' '):'';$('amt').focus()});
+function add(){
+ const a=num($('amt').value);if(!a){toast('Entrez un montant');$('amt').focus();return}
+ const n=new Date();const h=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+ day().ops.push({id:uid(),t:type,m:meth,a,n:$('desc').value.trim(),h});
+ save();$('amt').value='';$('desc').value='';render();toast((type==='in'?'Vente':'Dépense')+' de '+F(a)+' ajoutée');
+}
+$('add').onclick=add;
+$('amt').addEventListener('keydown',e=>{if(e.key==='Enter')add()});
+$('desc').addEventListener('keydown',e=>{if(e.key==='Enter')add()});
+$('ops').addEventListener('click',e=>{const b=e.target.closest('.del');if(!b)return;const d=day();const i=d.ops.findIndex(o=>o.id===b.dataset.id);if(i<0)return;lastDel={day:cur,op:d.ops.splice(i,1)[0]};save();render();toast('Opération supprimée',true)});
+$('undo').onclick=()=>{if(!lastDel)return;(db.days[lastDel.day]||(db.days[lastDel.day]={fond:0,compte:null,ops:[]})).ops.push(lastDel.op);lastDel=null;save();render();$('toast').style.display='none'};
+$('fond').addEventListener('input',e=>{day().fond=num(e.target.value);save();render()});
+$('compte').addEventListener('input',e=>{day().compte=e.target.value.trim()===''?null:num(e.target.value);save();render()});
+const shift=n=>{const d=new Date(cur+'T12:00');d.setDate(d.getDate()+n);cur=iso(d);render()};
+$('prev').onclick=()=>shift(-1);$('next').onclick=()=>shift(1);
+$('day').addEventListener('change',e=>{if(e.target.value){cur=e.target.value;render()}});
+$('clearDemo').onclick=()=>{db={days:{},demo:false};save();render();toast('Exemples effacés, à vous de jouer')};
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText(summary());toast('Texte copié')}catch(e){toast('Copie impossible sur cet appareil')}};
+render();
+}
+</script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}</script>
+</body>
+</html>
